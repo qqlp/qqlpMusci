@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>情人节爱心背景</title>
+
+<style>
+body{
+   overflow:hidden;
+  margin: 0;
+}
+h1{
+  position: fixed;
+  top: 40%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  transform:translateY(-50%);
+  font-family: 'Love Ya Like A Sister', cursive;
+  font-size: 80px;
+  color: #c70012;
+  padding: 0 20px;
+}
+h2{position: fixed;left: 10px;cursor: pointer;font-size: 50px;color:#666;}
+p{position: fixed;left:18%;bottom: 50px;font-size: 30px;color: #999;text-align:center;}
+#warm{top: 0;}
+#j{top: 100px;}
+#d{top: 200px;}
+#y{top: 300px;}
+@media (min-width:1200px){
+  h1,h2{
+    font-size: 50px;
+  }
+}
+
+</style>
+
+</head>
+<body>
+
+<canvas></canvas>
+<h1>琪琪老婆 有你真好</h1>
+<h2 id="warm">暖暖</h3>
+<h2 id="d">多幸运</h3>
+<h2 id="j">简单爱</h3>
+<h2 id="y">有何不可</h3>
+<p>来到这里 就是我蔡学钊的人了<br>此生我要陪你情窦初开 也要陪你两鬓斑白<br>老婆永远是最大 永远只对你一个人好 始终如一</p>
+<!--<embed id="warm1" src="暖暖.mp3" autostart="false" loop="true"/>
+<embed id="d1"src="多幸运.mp3" autostart="false" loop="true"/>
+<embed id="j1"src="简单爱.mp3" autostart="false" loop="true"/>
+<embed id="y1"src="有何不可.mp3" autostart="false" loop="true"/>-->
+
+
+
+
+<script>
+var warm=document.getElementById("warm");
+var warm1=document.getElementById("warm1");
+warm.onclick=function(){y1.stop();d1.stop();j1.stop();warm1.play()};
+
+var j=document.getElementById("j");
+var j1=document.getElementById("j1");
+j.onclick=function(){y1.stop();d1.stop(); warm1.stop(); j1.play()};
+
+var d=document.getElementById("d");
+var d1=document.getElementById("d1");
+d.onclick=function(){y1.stop();warm1.stop(); j1.stop(); d1.play()};
+
+var y=document.getElementById("y");
+var y1=document.getElementById("y1");
+y.onclick=function(){d1.stop();warm1.stop(); j1.stop(); y1.play()};
+
+
+var canvas = document.querySelector("canvas"),
+  ctx = canvas.getContext("2d");
+
+var ww,wh;
+
+function onResize(){
+  ww = canvas.width = window.innerWidth;
+  wh = canvas.height = window.innerHeight;
+}
+
+ctx.strokeStyle = "red";
+ctx.shadowBlur = 25;
+ctx.shadowColor = "hsla(0, 100%, 60%,0.5)";
+
+var precision = 100;
+var hearts = [];
+var mouseMoved = false;
+function onMove(e){
+  mouseMoved = true;
+  if(e.type === "touchmove"){
+    hearts.push(new Heart(e.touches[0].clientX, e.touches[0].clientY));
+    hearts.push(new Heart(e.touches[0].clientX, e.touches[0].clientY));
+
+  }
+  else{
+    hearts.push(new Heart(e.clientX, e.clientY));
+    hearts.push(new Heart(e.clientX, e.clientY));
+
+  }
+}
+
+var Heart = function(x,y){
+  this.x = x || Math.random()*ww;
+  this.y = y || Math.random()*wh;
+  this.size = Math.random()*2 + 1;
+  this.shadowBlur = Math.random() * 10;
+  this.speedX = (Math.random()+0.2-0.6) * 8;
+  this.speedY = (Math.random()+0.2-0.6) * 8;
+  this.speedSize = Math.random()*0.05 + 0.01;
+  this.opacity = 1;
+  this.vertices = [];
+  for (var i = 0; i < precision; i++) {
+    var step = (i / precision - 0.5) * (Math.PI * 2);
+    var vector = {
+      x : (15 * Math.pow(Math.sin(step), 3)),
+      y : -(13 * Math.cos(step) - 5 * Math.cos(2 * step) - 2 * Math.cos(3 * step) - Math.cos(4 * step))
+    }
+    this.vertices.push(vector);
+  }
+}
+
+Heart.prototype.draw = function(){
+  this.size -= this.speedSize;
+  this.x += this.speedX;
+  this.y += this.speedY;
+  ctx.save();
+  ctx.translate(-1000,this.y);
+  ctx.scale(this.size, this.size);
+  ctx.beginPath();
+  for (var i = 0; i < precision; i++) {
+    var vector = this.vertices[i];
+    ctx.lineTo(vector.x, vector.y);
+  }
+  ctx.globalAlpha = this.size;
+  ctx.shadowBlur = Math.round((3 - this.size) * 10);
+  ctx.shadowColor = "hsla(0, 100%, 60%,0.5)";
+  ctx.shadowOffsetX = this.x + 1000;
+  ctx.globalCompositeOperation = "screen"
+  ctx.closePath();
+  ctx.fill()
+  ctx.restore();
+};
+
+
+function render(a){
+  requestAnimationFrame(render);
+
+  hearts.push(new Heart())
+  ctx.clearRect(0,0,ww,wh);
+  for (var i = 0; i < hearts.length; i++) {
+    hearts[i].draw();
+    if(hearts[i].size <= 0){
+      hearts.splice(i,1);
+      i--;
+    }
+  }
+}
+
+
+onResize();
+window.addEventListener("mousemove", onMove);
+window.addEventListener("touchmove", onMove);
+window.addEventListener("resize", onResize);
+requestAnimationFrame(render);
+
+
+</script>
+
+</body>
+</html>
